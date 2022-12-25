@@ -1,5 +1,6 @@
 package com.rest.webservices.user;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,7 @@ public class UserResource {
     }
 
     @GetMapping("/users/{id}")
-    public User retrieveUsers(@PathVariable int id) {
+    public User retrieveUser(@PathVariable int id) {
         User user = userDaoService.findUserById(id);
 
         if(user == null) {
@@ -33,8 +34,14 @@ public class UserResource {
         return user;
     }
 
+
+    @DeleteMapping("/users/{id}")
+    public void deleteUser(@PathVariable int id) {
+        userDaoService.deleteById(id);
+    }
+
     @PostMapping("/users")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
         User savedUser = userDaoService.createUser(user);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
